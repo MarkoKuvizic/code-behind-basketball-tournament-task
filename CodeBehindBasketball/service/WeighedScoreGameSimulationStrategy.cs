@@ -22,6 +22,17 @@ public class WeighedScoreGameSimulationStrategy : IGameSimulationStrategy
         game.Team1Score = (int)(team1BaseScore + game.Team1Odds * 10 - random.NextDouble() * 10);
         game.Team2Score = (int)(team2BaseScore + game.Team2Odds * 10 - random.NextDouble() * 10);
 
+        if (game.Team1Score == game.Team2Score)
+        {
+            if (random.NextDouble() > game.Team1Odds)
+            {
+                game.Team2Score++;
+            }
+            else
+            {
+                game.Team1Score++;
+            }
+        }
         game.DetermineWinner();
     }
 }

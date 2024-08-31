@@ -83,13 +83,7 @@ public class SimpleScheduleService : IScheduleService
         foreach(string groupName in GroupRepository.GetGroupNames())
         {
             GroupRepository.SetGroup(groupName, groupRankingStrategy.RankGroupTeams(GroupRepository.GetGroup(groupName)));
-
-            Console.WriteLine(groupName);
-            foreach (Team team in GroupRepository.GetGroup(groupName))
-            {
-                Console.Write(team.Points);
-                Console.WriteLine(team.ToString());
-            }
+            PrintGroup(groupName);
         }
 
         List<Team> firstPlacedTeams = new List<Team>();
@@ -117,6 +111,15 @@ public class SimpleScheduleService : IScheduleService
         DrawQuarterfinals(quarterFinalists);
 
         
+    }
+    private void PrintGroup(string groupName)
+    {
+        Console.WriteLine(groupName);
+        foreach (Team team in GroupRepository.GetGroup(groupName))
+        {
+            Console.Write(team.Points);
+            Console.WriteLine(team.ToString());
+        }
     }
     private void DrawQuarterfinals(List<Team> teams)
     {

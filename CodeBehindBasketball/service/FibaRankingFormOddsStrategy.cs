@@ -22,7 +22,7 @@ internal class FibaRankingFormOddsStrategy : IOddsStrategy
     public void DetermineOdds(Game game)
     {
         double team1FormStrength = GetFormStrength(game.Team1);
-        double team2FormStrength = GetFormStrength(game.Team1);
+        double team2FormStrength = GetFormStrength(game.Team2);
 
         double team1FibaScore = (double)(maxFibaRanking - game.Team1.FIBARanking) / maxFibaRanking;
         double team2FibaScore = (double)(maxFibaRanking - game.Team2.FIBARanking) / maxFibaRanking;
