@@ -114,11 +114,10 @@ public class SimpleScheduleService : IScheduleService
     }
     private void PrintGroup(string groupName)
     {
-        Console.WriteLine(groupName);
+        Console.WriteLine($"Grupa {groupName}");
         foreach (Team team in GroupRepository.GetGroup(groupName))
         {
-            Console.Write(team.Points);
-            Console.WriteLine(team.ToString());
+            Console.WriteLine(team.ToTableRow());
         }
     }
     private void DrawQuarterfinals(List<Team> teams)

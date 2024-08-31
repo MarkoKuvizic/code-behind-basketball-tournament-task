@@ -18,6 +18,10 @@ public class Team
 
     public string ToString()
     {
+        return $"{ISOCode} ({FIBARanking})";
+    }
+    public string ToTableRow()
+    {
         return $"{ISOCode} (Fiba Ranking: {FIBARanking}) \t P:{Points}/BD:{BasketDifference}/Scored:{PointsScored}";
     }
     public void ProcessResult(Game game)
