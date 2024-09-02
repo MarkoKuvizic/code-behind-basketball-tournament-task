@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CodeBehindBasketball.repo;
 
-public class TeamFormPreloader : ITeamPreloader
+public class TeamFormLoadingDecorator : ITeamLoadingDecorator
 {
     private static readonly string PATH = "exibitions.json";
     

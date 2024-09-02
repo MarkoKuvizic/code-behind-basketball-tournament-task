@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CodeBehindBasketball.repo;
 
-public interface ITeamPreloader
+public interface ITeamLoadingDecorator
 {
     public void Load(Dictionary<string, Team> teams);
 }

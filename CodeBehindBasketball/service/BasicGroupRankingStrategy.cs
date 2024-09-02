@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CodeBehindBasketball.service;
-
+//Ranking strategy that ranks teams within a group according to points first, head to head records second and basket difference third
 public class BasicGroupRankingStrategy : IGroupRankingStrategy
 {
     public List<Team> RankGroupTeams(List<Team> teams)

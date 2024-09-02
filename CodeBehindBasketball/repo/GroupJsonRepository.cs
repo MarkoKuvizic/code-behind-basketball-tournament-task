@@ -12,14 +12,14 @@ public class GroupJsonRepository : IGroupRepository
 {
     private static string PATH;
     private Dictionary<string, List<Team>> items;
-    private List<ITeamPreloader> preloaders;
+    private List<ITeamLoadingDecorator> preloaders;
 
     public GroupJsonRepository(string path)
     {
         PATH = path;
 
-        preloaders = new List<ITeamPreloader>();
-        preloaders.Add(new TeamFormPreloader());
+        preloaders = new List<ITeamLoadingDecorator>();
+        preloaders.Add(new TeamFormLoadingDecorator());
 
         load();
     }

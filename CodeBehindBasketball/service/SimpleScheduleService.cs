@@ -3,6 +3,7 @@ using CodeBehindBasketball.repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace CodeBehindBasketball.service;
 
 public class SimpleScheduleService : IScheduleService
 {
+    // Service class encapsulating logic to handle schedule operations such as drawing matchups
     private IGroupRepository GroupRepository;
     private IOddsStrategy oddsStrategy;
     private IGameSimulationStrategy gameSimulationStrategy;
@@ -43,6 +45,8 @@ public class SimpleScheduleService : IScheduleService
     }
     private List<(string, List<Game>)> GetGroupGames(string groupName)
     {
+        //Generates and returns pairings for each stage of a given group
+        
         List<Team> teams = GroupRepository.GetGroup(groupName);
 
         List<(string, List<Game>)> rounds = new List<(string, List<Game>)>();
@@ -71,6 +75,7 @@ public class SimpleScheduleService : IScheduleService
     }
     public void ExecuteRound()
     {
+        //Pops and simulates the next round of the schedule
         (String roundName, List<Game> games) = Schedule.PopRound();
 
         games.ForEach(game => oddsStrategy.DetermineOdds(game));
@@ -82,7 +87,7 @@ public class SimpleScheduleService : IScheduleService
 
     public void ExecuteKnockoutStage()
     {
-
+        
         foreach (string groupName in GroupRepository.GetGroupNames())
         {
             GroupRepository.SetGroup(groupName, groupRankingStrategy.RankGroupTeams(GroupRepository.GetGroup(groupName)));
@@ -149,6 +154,7 @@ public class SimpleScheduleService : IScheduleService
     }
     private List<List<Team>> DrawQuarterfinals(List<Team> teams)
     {
+        // Separates given quarterfinalist teams into Hats and draws quarterfinals matchups
         Random random = new Random();
 
         // Split teams into their respective hats
@@ -192,7 +198,8 @@ public class SimpleScheduleService : IScheduleService
 
     }
     private static void ShuffleTeams(List<Team> teams, Random random)
-    {
+    {   
+        // Helper function to randomize the order of teams within a list
         for (int i = teams.Count - 1; i > 0; i--)
         {
             int j = random.Next(i + 1);
