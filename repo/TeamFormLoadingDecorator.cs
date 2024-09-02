@@ -38,7 +38,7 @@ public class TeamFormLoadingDecorator : ITeamLoadingDecorator
                 }
                 catch (Exception ex)
                 {
-                    //We ignore fixtures against teams that don't otherwise show up in the dataset, because we have know way to calculate the strength of that fixture (no fiba ranking or form for the team)
+                    //We ignore fixtures against teams that don't otherwise show up in the dataset, because we have no way to calculate the strength of that fixture (no fiba ranking or form for the team)
                     //In this case that was POR (Probably portugal)
                 }
             }
