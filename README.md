@@ -1,3 +1,5 @@
+**Napomena - projekat je u vidu visual studio rešenja, da bi se pokrenuo sa dotnet run samo treba ući u direktorijum CodeBehindBasketball
+
 # Zadatak - Olimpijske igre
 
 - Napisati JavaScript / C# program za simulaciju košarkaškog turnira na Olimpijskim igrama.

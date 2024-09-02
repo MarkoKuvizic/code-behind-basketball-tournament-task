@@ -10,7 +10,7 @@ namespace CodeBehindBasketball.repo;
 
 public class TeamFormPreloader : ITeamPreloader
 {
-    private static readonly string PATH = "../../../../exibitions.json";
+    private static readonly string PATH = "exibitions.json";
     
 
     public void Load(Dictionary<string, Team> teams)
