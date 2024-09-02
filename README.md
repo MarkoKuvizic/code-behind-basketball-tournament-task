@@ -1,4 +1,5 @@
-**Napomena - projekat je u vidu visual studio rešenja, da bi se pokrenuo sa dotnet run samo treba ući u direktorijum CodeBehindBasketball
+**Napomena - Projekat na main grani je prepakovan tako da se moze klonirati i pokrenuti sa dotnet run is root foldera 
+(za slucaj da je to na neki nacin automatizovano). Postoji druga grana sa originalnim visual studio resenjem
 
 # Zadatak - Olimpijske igre
 
