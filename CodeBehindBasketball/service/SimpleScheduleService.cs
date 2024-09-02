@@ -30,7 +30,8 @@ public class SimpleScheduleService : IScheduleService
         this.groupRankingStrategy = groupRankingStrategy;
     }
 
-    public void GenerateGroupStageSchedule() {
+    public void GenerateGroupStageSchedule()
+    {
         foreach (string groupName in GroupRepository.GetGroupNames())
         {
             Schedule.AddRounds(GetGroupGames(groupName));
@@ -63,12 +64,13 @@ public class SimpleScheduleService : IScheduleService
                 game.IsCompetitive = true;
                 currentRound.Add(game);
             }
-            rounds.Add((GetGroupStageRoundName(round + 1, groupName),currentRound));
+            rounds.Add((GetGroupStageRoundName(round + 1, groupName), currentRound));
         }
 
         return rounds;
     }
-    public void ExecuteRound() {
+    public void ExecuteRound()
+    {
         (String roundName, List<Game> games) = Schedule.PopRound();
 
         games.ForEach(game => oddsStrategy.DetermineOdds(game));
@@ -78,19 +80,46 @@ public class SimpleScheduleService : IScheduleService
     }
     private void GenerateKnockoutStageRound() { }
 
-    public void ExecuteKnockoutStage() {
-        
-        foreach(string groupName in GroupRepository.GetGroupNames())
+    public void ExecuteKnockoutStage()
+    {
+
+        foreach (string groupName in GroupRepository.GetGroupNames())
         {
             GroupRepository.SetGroup(groupName, groupRankingStrategy.RankGroupTeams(GroupRepository.GetGroup(groupName)));
             PrintGroup(groupName);
         }
+        List<Team> quarterFinalists = DetermineQuarterFinalists();
+        PrintHats(quarterFinalists);
+        var quarterFinals = DrawQuarterfinals(quarterFinalists);
+        DrawSemifinals(quarterFinals);
+
+        ExecuteRound();
+
+        (_, List<Game> quarterFinalsGames) = Schedule.GetCurrentRound();
+        Schedule.AddRound("Polufinale", [new Game(quarterFinalsGames[0].Winner, quarterFinalsGames[3].Winner), new Game(quarterFinalsGames[1].Winner, quarterFinalsGames[2].Winner)]);
+
+        ExecuteRound();
+
+
+        (_, List<Game> semiFinalsGames) = Schedule.GetCurrentRound();
+        Schedule.AddRound("Finale", [new Game(semiFinalsGames[0].Winner, semiFinalsGames[1].Winner)]);
+
+        Schedule.AddRound("Utakmica za trece mesto", [new Game(semiFinalsGames[0].Loser, semiFinalsGames[1].Loser)]);
+
+        ExecuteRound();
+        ExecuteRound();
+
+        (_, List<Game> finals) = Schedule.GetCurrentRound();
+        Schedule.PrintKnockoutStage();
+    }
+    private List<Team> DetermineQuarterFinalists()
+    {
 
         List<Team> firstPlacedTeams = new List<Team>();
         List<Team> secondPlacedTeams = new List<Team>();
         List<Team> thirdPlacedTeams = new List<Team>();
 
-        foreach(string groupName in GroupRepository.GetGroupNames())
+        foreach (string groupName in GroupRepository.GetGroupNames())
         {
             List<Team> group = GroupRepository.GetGroup(groupName);
 
@@ -107,10 +136,8 @@ public class SimpleScheduleService : IScheduleService
         quarterFinalists.AddRange(firstPlacedTeams);
         quarterFinalists.AddRange(secondPlacedTeams);
         quarterFinalists.AddRange(thirdPlacedTeams.Take(2));
-        PrintHats(quarterFinalists);
-        DrawQuarterfinals(quarterFinalists);
 
-        
+        return quarterFinalists;
     }
     private void PrintGroup(string groupName)
     {
@@ -120,7 +147,7 @@ public class SimpleScheduleService : IScheduleService
             Console.WriteLine(team.ToTableRow());
         }
     }
-    private void DrawQuarterfinals(List<Team> teams)
+    private List<List<Team>> DrawQuarterfinals(List<Team> teams)
     {
         Random random = new Random();
 
@@ -150,32 +177,19 @@ public class SimpleScheduleService : IScheduleService
 
         Schedule.AddRound("Cervrt finale", [new Game(quarterfinal1[0], quarterfinal1[1]), new Game(quarterfinal2[0], quarterfinal2[1]), new Game(quarterfinal3[0], quarterfinal3[1]), new Game(quarterfinal4[0], quarterfinal4[1])]);
 
+        return [quarterfinal1, quarterfinal2, quarterfinal3, quarterfinal4];
+    }
+    private void DrawSemifinals(List<List<Team>> quarterfinals)
+    {
         // Determine the semifinal matchups
-        var semifinal1 = new List<List<Team>> { quarterfinal1, quarterfinal4 };
-        var semifinal2 = new List<List<Team>> { quarterfinal2, quarterfinal3 };
+        var semifinal1 = new List<List<Team>> { quarterfinals[0], quarterfinals[3] };
+        var semifinal2 = new List<List<Team>> { quarterfinals[1], quarterfinals[2] };
 
         Console.WriteLine("\nPolufinale:");
         PrintSemifinalMatchup(semifinal1);
         PrintSemifinalMatchup(semifinal2);
 
-        ExecuteRound();
 
-        (_, List<Game> quarterFinals) = Schedule.GetCurrentRound();
-        Schedule.AddRound("Polufinale", [new Game(quarterFinals[0].Winner, quarterFinals[3].Winner), new Game(quarterFinals[1].Winner, quarterFinals[2].Winner)]);
-
-        ExecuteRound();
-
-
-        (_, List<Game> semiFinals) = Schedule.GetCurrentRound();
-        Schedule.AddRound("Finale", [new Game(semiFinals[0].Winner, semiFinals[1].Winner)]);
-
-        Schedule.AddRound("Utakmica za trece mesto", [new Game(semiFinals[0].Loser, semiFinals[1].Loser)]);
-
-        ExecuteRound();
-        ExecuteRound();
-
-        (_, List<Game> finals) = Schedule.GetCurrentRound();
-        Schedule.PrintKnockoutStage();
     }
     private static void ShuffleTeams(List<Team> teams, Random random)
     {
