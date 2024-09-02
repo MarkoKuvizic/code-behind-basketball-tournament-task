@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CodeBehindBasketball.repo;
 
+//Defines repository for teams organized as a group stage (group name - list of teams)
 public interface IGroupRepository : IRepository<Team>
 {
     public List<Team> GetGroup(string groupName);

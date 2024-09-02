@@ -10,13 +10,14 @@ namespace CodeBehindBasketball.service;
 
 internal class FibaRankingFormOddsStrategy : IOddsStrategy
 {
-    private const double baseWinWeight = 10.0;
+    // Strategy for determining odds to win that incorporates both team form and fiba ranking
+    private const double baseWinWeight = 10.0; 
     private const double rankingFormWeight = 0.5;
     private const double formStrengthWeight = 0.3;
     private const double scoreDifferenceWeight = 0.2;
 
     private const double formStrengthWeigth = 0.3;
-    private const double fibaRankingWeigth = 1 - formStrengthWeigth;
+    private const double fibaRankingWeigth = 1 - formStrengthWeigth;    // Weights should add up to 1
     private const double maxFibaRanking = 50;
 
     public void DetermineOdds(Game game)
@@ -41,7 +42,7 @@ internal class FibaRankingFormOddsStrategy : IOddsStrategy
         foreach (Game game in team.Form)
         {
             Team opponent = game.GetOtherTeam(team);
-            double opponentFormStrength = opponent.FormStrength != null ? opponent.FormStrength : GetFormStrength(opponent);
+            double opponentFormStrength = opponent.FormStrength != null ? opponent.FormStrength : GetFormStrength(opponent);    // If the opposing team has a predetermined form strength, use it, otherwise calculate recursively
             int opponentRanking = opponent.FIBARanking;
             bool didWin = game.DidTeamWin(team);
             int scoreDifference = game.GetScoreDifference(team);
